@@ -16,6 +16,7 @@ void SWColorWheel::Construct(const FArguments& InArgs)
 	OnMouseCaptureBegin = InArgs._OnMouseCaptureBegin;
 	OnMouseCaptureEnd = InArgs._OnMouseCaptureEnd;
 	OnValueChanged = InArgs._OnValueChanged;
+	OnPositionChanged = InArgs._OnPositionChanged;
 }
 
 void SWColorWheel::SetColorAndOpacity(FLinearColor InColorAndOpacity, TEnumAsByte<EWheelBrushTarget> TargetBrush)
@@ -138,6 +139,10 @@ bool SWColorWheel::ProcessMouseAction(const FGeometry& MyGeometry, const FPointe
 {
 	const FVector2D LocalMouseCoordinate = MyGeometry.AbsoluteToLocal(MouseEvent.GetScreenSpacePosition());
 	const FVector2D RelativePositionFromCenter = (2.0f * LocalMouseCoordinate - MyGeometry.GetLocalSize()) / (MyGeometry.GetLocalSize() - SelectorImage->ImageSize);
+	
+	OnPositionChanged.ExecuteIfBound(FVector2D(FMath::Clamp(RelativePositionFromCenter.X, -1.0, 1.0), -1.0 * FMath::Clamp(RelativePositionFromCenter.Y, -1.0, 1.0)));
+	//UE_LOG(LogTemp, Warning, TEXT("X: %f - Y: %f"), RelativePositionFromCenter.X, RelativePositionFromCenter.Y)
+	
 	const float RelativeRadius = RelativePositionFromCenter.Size();
 
 	if (RelativeRadius <= 1.0f || bProcessWhenOutsideColorWheel)

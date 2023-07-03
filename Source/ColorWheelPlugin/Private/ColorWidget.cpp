@@ -12,7 +12,8 @@ TSharedRef<SWidget> UColorWidget::RebuildWidget()
                 .HueCircle(&HueCircle)
                 .OnMouseCaptureBegin_UObject(this, &UColorWidget::MouseDown)
                 .OnMouseCaptureEnd_UObject(this, &UColorWidget::MouseUp)
-                .OnValueChanged(FOnLinearColorValueChanged::CreateUObject(this, &UColorWidget::OnValueChanged));
+                .OnValueChanged(FOnLinearColorValueChanged::CreateUObject(this, &UColorWidget::OnValueChanged))
+                .OnPositionChanged(FOnPositionChanged::CreateUObject(this, &UColorWidget::OnPositionUpdated));
 	
     return ColorWheel.ToSharedRef();
 }
@@ -28,6 +29,13 @@ void UColorWidget::OnValueChanged(FLinearColor NewValue)
 {
     Color = NewValue.HSVToLinearRGB();
     OnColorChanged.Broadcast(Color);
+}
+
+
+void UColorWidget::OnPositionUpdated(FVector2D NewPosition)
+{
+    //UE_LOG(LogTemp, Warning, TEXT("D - X: %f - Y: %f"), NewPosition.X, NewPosition.Y)
+    OnPositionChanged.Broadcast(NewPosition);
 }
 
 /// Main Functions ///
