@@ -20,6 +20,8 @@ class FPaintArgs;
 class FSlateWindowElementList;
 struct FSlateBrush;
 
+DECLARE_DELEGATE_OneParam(FOnPositionChanged, FVector2D)
+
 // Used for some of the Color wheels UFUNCTIONS to specify the target brush.
 UENUM()
 enum EWheelBrushTarget
@@ -50,6 +52,7 @@ public:
         , _OnMouseCaptureBegin()
         , _OnMouseCaptureEnd()
         , _OnValueChanged()
+        , _OnPositionChanged()
         { }
 
         /// Attributes ///
@@ -75,6 +78,9 @@ public:
 
         /** Invoked when a new value is selected on the color wheel. */
         SLATE_EVENT(FOnLinearColorValueChanged, OnValueChanged)
+
+        /** Invoked when a new value is selected on the widget wheel. */
+        SLATE_EVENT(FOnPositionChanged, OnPositionChanged);
 
     SLATE_END_ARGS()
 
@@ -153,5 +159,8 @@ private:
 
     /** Invoked when a new value is selected on the color wheel. */
     FOnLinearColorValueChanged OnValueChanged;
+
+	/** Invoked when a new value is selected on the color wheel. */
+    FOnPositionChanged OnPositionChanged;
     
 };

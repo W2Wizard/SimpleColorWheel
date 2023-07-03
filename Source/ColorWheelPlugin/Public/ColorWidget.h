@@ -22,6 +22,8 @@ class SWColorWheel;
  */
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FColorChangedEvent, const FLinearColor&, NewColor);
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FPositionUpdatedEvent, const FVector2D&, NewPosition);
+
 /** Delegate: Broadcasted when the mouse is down on the Wheel. */
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FMouseDownEvent);
 
@@ -56,9 +58,13 @@ public:
 	|                                  Events                                     |
 	\============================================================================*/
 	
-	/** Event called when value is changed */
+	/** Event called when color value is changed */
 	UPROPERTY(BlueprintAssignable, Category="Color Wheel|Event")
 	FColorChangedEvent OnColorChanged;
+
+	/** Event called when value is changed */
+	UPROPERTY(BlueprintAssignable, Category = "Color Wheel|Event")
+	FPositionUpdatedEvent OnPositionChanged;
 
 	/** Event called when the mouse is being pressed on the wheel */
 	UPROPERTY(BlueprintAssignable, Category="Color Wheel|Event")
@@ -134,6 +140,8 @@ private:
 
 	// Callback Function: Handles the broadcasting of the delegate once a color changes.
 	void OnValueChanged(FLinearColor NewValue);
+
+	void OnPositionUpdated(FVector2D NewPosition);
 
 	// Callback Function: Handles the broadcasting for when the Mouse is lifted from the wheel.
 	inline void MouseUp() { OnMouseUp.Broadcast(); };
